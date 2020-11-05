@@ -1,18 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Head from './head'
-// import wave from '../assets/images/wave.jpg'
+import Square from './square'
 
 const Home = () => {
-  const [counter, setCounterNew] = useState(0)
-
+  const array = new Array(25).fill('')
   return (
-    <div>
+    <div className="flex justify-center">
       <Head title="Hello" />
-      <img alt="wave" src="images/wave.jpg" />
-      <button type="button" onClick={() => setCounterNew(counter + 1)}>
-        updateCounter
-      </button>
-      <div> Hello World Dashboard {counter} </div>
+      Home
+      <div className="flex flex-wrap w-2/4 border border-black m-5">
+        {array.map((square, index) => {
+          return (
+            <div key={index}>
+              <Square square={square} />
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
