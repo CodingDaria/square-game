@@ -1,22 +1,19 @@
 import React from 'react'
+import { Link, Switch, Route } from 'react-router-dom'
 import Head from './head'
-import Square from './square'
+import Input from './input'
+import Field from './field'
+import './game.scss'
 
 const Home = () => {
-  const array = new Array(25).fill('')
   return (
     <div className="flex justify-center">
       <Head title="Hello" />
-      Home
-      <div className="flex flex-wrap w-2/4 border border-black m-5">
-        {array.map((square, index) => {
-          return (
-            <div key={index}>
-              <Square square={square} />
-            </div>
-          )
-        })}
-      </div>
+      <Link to="/">Home</Link>
+      <Switch>
+        <Route exact path="/" component={() => <Input />} />
+        <Route exact path="/game" component={() => <Field />} />
+      </Switch>
     </div>
   )
 }
