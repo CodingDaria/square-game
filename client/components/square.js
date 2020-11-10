@@ -1,10 +1,9 @@
 import React from 'react'
 import './game.scss'
 
-const Square = () => {
-  return (
-    <button type="button" className="bg-gray-600 game-square" />
-  )
+const Square = (props) => {
+  const { square } = props
+  return <button type="button" className={`bg-${square.status}-600 game-square`} />
 }
 
 Square.propTypes = {}
