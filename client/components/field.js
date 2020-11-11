@@ -1,33 +1,45 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateField, setYellow } from '../redux/reducers/game'
 import Square from './square'
 import './game.scss'
 
 const Field = () => {
   const fieldSize = useSelector((store) => store.game.fieldSize)
+  const squares = useSelector((store) => store.game.squares)
+  const freeSquares = useSelector((store) => store.game.freeSquares)
   const containerWidth = 56 * fieldSize.width
-  const array = new Array(fieldSize.width * fieldSize.height)
-    .fill(null)
-    .map((it, index) => ({ id: index + 1, status: 'gray' }))
-  // const randomSquare = array.filter((it) => it.status === 'gray')[Math.floor(Math.random() * array.length)]
+  const dispatch = useDispatch()
+  const getRandomSquare = () => {
+    console.log(freeSquares.map((it) => `${it.id} ${it.status}`))
+    return freeSquares[Math.floor(Math.random() * freeSquares.length)]
+  }
+  // const [selectedSquare] = useState(getRandomSquare())
+  const nextSquare = () => {
+    setTimeout(() => {
+      const randomSquare = getRandomSquare()
+      // console.log(randomSquare.id)
+      dispatch(setYellow(randomSquare))
+      nextSquare()
+    }, 1000)
+  }
   useEffect(() => {
+    nextSquare()
+    dispatch(updateField())
     // const timeoutId = setTimeout(() => {
-    //   return
+    //   const randomSquare = getRandomSquare()
+    //   dispatch(setYellow(randomSquare))
     // }, 1000)
+    // console.log(timeoutId)
     // clearTimeout(timeoutId)
-    return 1
   }, [])
   return (
     <div
-      style={{ width: containerWidth }}
+      style={{ width: `${containerWidth}px` }}
       className="flex flex-wrap box-content border-2 border-gray-900 justify-start m-8"
     >
-      {array.map((square) => {
-        return (
-          <div key={square.id}>
-            <Square square={square} />
-          </div>
-        )
+      {squares.map((square) => {
+        return <Square key={square.id} square={square} />
       })}
     </div>
   )
