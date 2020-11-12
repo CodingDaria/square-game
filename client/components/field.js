@@ -1,38 +1,40 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateField, setYellow } from '../redux/reducers/game'
+import { setYellow } from '../redux/reducers/game'
 import Square from './square'
 import './game.scss'
 
 const Field = () => {
   const fieldSize = useSelector((store) => store.game.fieldSize)
   const squares = useSelector((store) => store.game.squares)
+  // const { freeSquares } = props
   const freeSquares = useSelector((store) => store.game.freeSquares)
   const containerWidth = 56 * fieldSize.width
   const dispatch = useDispatch()
-  const getRandomSquare = () => {
-    console.log(freeSquares.map((it) => `${it.id} ${it.status}`))
-    return freeSquares[Math.floor(Math.random() * freeSquares.length)]
-  }
+  const [tid, setTimeoutId] = useState(null)
   // const [selectedSquare] = useState(getRandomSquare())
+  const getRandomSquare = () => {
+    const free = Math.floor(Math.random() * freeSquares.length)
+    // console.log(freeSquares.map((it) => `${it.id} ${it.status}`))
+    return freeSquares[free]
+  }
+  const updateState = () => {
+    dispatch(setYellow(getRandomSquare()))
+    clearTimeout(tid)
+    setTimeoutId(null)
+  }
   const nextSquare = () => {
-    setTimeout(() => {
-      const randomSquare = getRandomSquare()
-      // console.log(randomSquare.id)
-      dispatch(setYellow(randomSquare))
-      nextSquare()
+    const timeoutId = setTimeout(() => {
+      updateState()
     }, 1000)
+    setTimeoutId(timeoutId)
+    console.log(freeSquares.length)
   }
   useEffect(() => {
-    nextSquare()
-    dispatch(updateField())
-    // const timeoutId = setTimeout(() => {
-    //   const randomSquare = getRandomSquare()
-    //   dispatch(setYellow(randomSquare))
-    // }, 1000)
-    // console.log(timeoutId)
-    // clearTimeout(timeoutId)
-  }, [])
+    if (tid === null && freeSquares.length > 0) {
+      nextSquare()
+    }
+  }, [tid])
   return (
     <div
       style={{ width: `${containerWidth}px` }}

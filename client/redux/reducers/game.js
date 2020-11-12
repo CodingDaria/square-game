@@ -14,17 +14,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fieldSize: { width: action.x || 5, height: action.y || 5 },
-        squares: action.squares
+        squares: action.squares,
+        freeSquares: action.squares.filter((it) => it.status === 'gray')
       }
     case UPDATE_FIELD:
       return {
-        ...state,
-        freeSquares: state.squares.filter((it) => it.status === 'gray')
+        ...state
       }
     case SET_YELLOW:
       return {
         ...state,
-        squares: state.squares.map((square) => action.square.id === square.id ? { ...square, status: 'yellow' } : square)
+        squares: state.squares.map((square) => action.square.id === square.id ? action.square : square),
+        freeSquares: state.squares.map((square) => action.square.id === square.id ? action.square : square).filter((it) => it.status === 'gray')
       }
     default:
       return state
@@ -57,7 +58,7 @@ export function setYellow(square) {
   return (dispatch) => {
     dispatch({
       type: SET_YELLOW,
-      square
+      square: { id: square.id, status: 'yellow' }
     })
   }
 }
