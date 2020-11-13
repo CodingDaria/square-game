@@ -10,7 +10,7 @@ import Field from './field'
 const Home = () => {
   // const freeSquares = useSelector((store) => store.game.freeSquares)
   return (
-    <div className="flex justify-center">
+    <div>
       <Head title="Hello" />
       <Header />
       <Switch>

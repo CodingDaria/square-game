@@ -2,6 +2,7 @@ const SET_FIELD = 'SET_FIELD'
 const SET_YELLOW = 'SET_YELLOW'
 const SET_GREEN = 'SET_GREEN'
 const SET_RED = 'SET_RED'
+// '@@router/LOCATION_CHANGE'
 
 const initialState = {
   fieldSize: { width: 5, height: 5 },

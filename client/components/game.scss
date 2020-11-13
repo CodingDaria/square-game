@@ -2,7 +2,8 @@
   width: 200px;
 }
 .game-square {
-  width: 50px;
+  flex-basis: 50px;
+  flex-grow: 1;
   height: 50px;
   box-sizing: border-box;
   margin-left: 3px;
