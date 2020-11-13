@@ -1,40 +1,45 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setYellow } from '../redux/reducers/game'
+import { setYellow, setRed } from '../redux/reducers/game'
 import Square from './square'
 import './game.scss'
 
 const Field = () => {
   const fieldSize = useSelector((store) => store.game.fieldSize)
   const squares = useSelector((store) => store.game.squares)
-  // const { freeSquares } = props
-  const freeSquares = useSelector((store) => store.game.freeSquares)
-  const containerWidth = 56 * fieldSize.width
   const dispatch = useDispatch()
   const [tid, setTimeoutId] = useState(null)
-  // const [selectedSquare] = useState(getRandomSquare())
   const getRandomSquare = () => {
+    const freeSquares = squares.filter((it) => it.status === 'gray')
     const free = Math.floor(Math.random() * freeSquares.length)
-    // console.log(freeSquares.map((it) => `${it.id} ${it.status}`))
     return freeSquares[free]
   }
   const updateState = () => {
-    dispatch(setYellow(getRandomSquare()))
+    const randomSquare = getRandomSquare()
+    if (typeof randomSquare !== 'undefined') {
+      dispatch(setYellow(randomSquare))
+    }
     clearTimeout(tid)
     setTimeoutId(null)
   }
   const nextSquare = () => {
     const timeoutId = setTimeout(() => {
       updateState()
+      squares.forEach((square) => {
+        if (square.status === 'yellow') {
+          dispatch(setRed(square))
+        }
+      })
     }, 1000)
     setTimeoutId(timeoutId)
-    console.log(freeSquares.length)
+    // console.log(squares.map((it) => `${it.id} ${it.status}`))
   }
   useEffect(() => {
-    if (tid === null && freeSquares.length > 0) {
+    if (tid === null && squares.find((square) => square.status === 'gray' || square.status === 'yellow')) {
       nextSquare()
     }
   }, [tid])
+  const containerWidth = 56 * fieldSize.width
   return (
     <div
       style={{ width: `${containerWidth}px` }}

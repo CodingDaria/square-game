@@ -1,11 +1,11 @@
 const SET_FIELD = 'SET_FIELD'
-const UPDATE_FIELD = 'UPDATE_FIELD'
 const SET_YELLOW = 'SET_YELLOW'
+const SET_GREEN = 'SET_GREEN'
+const SET_RED = 'SET_RED'
 
 const initialState = {
   fieldSize: { width: 5, height: 5 },
-  squares: new Array(5 * 5).fill(null).map((it, index) => ({ id: index + 1, status: 'gray' })),
-  freeSquares: new Array(5 * 5).fill(null).map((it, index) => ({ id: index + 1, status: 'gray' }))
+  squares: new Array(5 * 5).fill(null).map((it, index) => ({ id: index + 1, status: 'gray' }))
 }
 
 export default (state = initialState, action) => {
@@ -14,18 +14,22 @@ export default (state = initialState, action) => {
       return {
         ...state,
         fieldSize: { width: action.x || 5, height: action.y || 5 },
-        squares: action.squares,
-        freeSquares: action.squares.filter((it) => it.status === 'gray')
-      }
-    case UPDATE_FIELD:
-      return {
-        ...state
+        squares: action.squares
       }
     case SET_YELLOW:
       return {
         ...state,
-        squares: state.squares.map((square) => action.square.id === square.id ? action.square : square),
-        freeSquares: state.squares.map((square) => action.square.id === square.id ? action.square : square).filter((it) => it.status === 'gray')
+        squares: state.squares.map((square) => action.square.id === square.id ? action.square : square)
+      }
+    case SET_GREEN:
+      return {
+        ...state,
+        squares: state.squares.map((square) => action.square.id === square.id ? action.square : square)
+      }
+    case SET_RED:
+      return {
+        ...state,
+        squares: state.squares.map((square) => action.square.id === square.id && !square.isClicked ? action.square : square)
       }
     default:
       return state
@@ -38,18 +42,7 @@ export function setField(x, y) {
       type: SET_FIELD,
       x,
       y,
-      squares: new Array(x * y).fill(null).map((it, index) => ({ id: index + 1, status: 'gray' })),
-      freeSquares: new Array(x * y).fill(null).map((it, index) => ({ id: index + 1, status: 'gray' }))
-    })
-  }
-}
-
-export function updateField() {
-  return (dispatch) => {
-    // const store = getState()
-    // const { squares } = store.game
-    dispatch({
-      type: UPDATE_FIELD
+      squares: new Array(x * y).fill(null).map((it, index) => ({ id: index + 1, status: 'gray' }))
     })
   }
 }
@@ -59,6 +52,24 @@ export function setYellow(square) {
     dispatch({
       type: SET_YELLOW,
       square: { id: square.id, status: 'yellow' }
+    })
+  }
+}
+
+export function setGreen(square) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_GREEN,
+      square: { id: square.id, status: 'green', isClicked: true }
+    })
+  }
+}
+
+export function setRed(square) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_RED,
+      square: { id: square.id, status: 'red' }
     })
   }
 }
