@@ -20,11 +20,10 @@ const Input = () => {
       <div className="w-1/3 justify-center">
         <div>
           <input
-            type="text"
+            type="number"
+            min="2"
+            max="12"
             onChange={(e) => {
-              if (!Number(e.target.value)) {
-                e.target.value = ''
-              }
               setWidth(e.target.value)
               if (e.target.value.length > 0) {
                 setDisabledW(false)
@@ -38,11 +37,10 @@ const Input = () => {
             className="shadow appearance-none border border-gray-500 rounded w-full p-2 m-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
           <input
-            type="text"
+            type="number"
+            min="2"
+            max="12"
             onChange={(e) => {
-              if (!Number(e.target.value)) {
-                e.target.value = ''
-              }
               setHeight(e.target.value)
               if (e.target.value.length > 0) {
                 setDisabledH(false)

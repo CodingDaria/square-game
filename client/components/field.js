@@ -47,7 +47,7 @@ const Field = () => {
         squares.filter((square) => square.status === 'green').length &&
       !squares.find((square) => square.status === 'gray' || square.status === 'yellow')
     ) {
-      setFinal('You lose')
+      setFinal('You lost')
     } else if (
       squares.filter((square) => square.status === 'red').length <
         squares.filter((square) => square.status === 'green').length &&
